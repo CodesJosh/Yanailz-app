@@ -39,7 +39,6 @@ fun BookingBottomSheet(vm: BookingViewModel) {
             Spacer(Modifier.height(16.dp))
 
             // Hora
-            // --- MODIFICACIÓN ---
             // Ahora le pasamos el ViewModel y la fecha seleccionada (date)
             // para que sepa qué horas deshabilitar.
             TimeSelector(
@@ -82,14 +81,13 @@ private fun DateSelector(
     Text("Fecha: $date")
 }
 
-// --- MODIFICACIÓN GRANDE AQUÍ ---
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun TimeSelector(
     time: LocalTime,
     onChange: (LocalTime) -> Unit,
-    vm: BookingViewModel,          // <-- Parámetro nuevo
-    selectedDate: LocalDate   // <-- Parámetro nuevo
+    vm: BookingViewModel,
+    selectedDate: LocalDate
 ) {
     val slots = listOf(9,10,11,12,14,15,16,17,18).map { LocalTime.of(it, 0) }
 
@@ -97,8 +95,7 @@ private fun TimeSelector(
     Spacer(Modifier.height(8.dp))
 
     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        slots.forEach { t ->
-            // --- ¡AQUÍ ESTÁ LA MAGIA! ---
+        slots.forEach { t ->S
             // Revisamos si esta hora (t) en este día (selectedDate) ya está tomada
             val isTaken = vm.isSlotTaken(selectedDate, t)
 

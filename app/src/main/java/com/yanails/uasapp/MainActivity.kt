@@ -12,7 +12,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             UñasAppTheme {
-                // Aquí llamamos al "cerebro" de nuestra app, que está en App.kt
                 App()
             }
         }

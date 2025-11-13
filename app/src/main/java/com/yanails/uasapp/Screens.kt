@@ -18,8 +18,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import java.time.format.DateTimeFormatter
 
-// --- PANTALLA 1: INICIO ---
-
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -49,7 +47,7 @@ fun HomeScreen(
                 ),
             contentAlignment = Alignment.Center
         ) {
-            Text("Aquí irá tu foto principal")
+            Text("Aquí foto principal")
         }
         Spacer(Modifier.height(24.dp))
         Button(
@@ -64,7 +62,6 @@ fun HomeScreen(
         Spacer(Modifier.height(8.dp))
         // Muestra solo los 2 primeros servicios en Home
         DemoData.services.take(2).forEach { s ->
-            // Usamos la misma tarjeta, pero el botón no hace nada aquí
             ServiceCard(service = s, onBook = { onCTAClick() })
         }
     }
@@ -77,7 +74,6 @@ fun ServicesScreen(
     services: List<Service>,
     onBook: (Service) -> Unit
 ) {
-    // LazyColumn es eficiente para listas largas (como un FlatList)
     LazyColumn(
         modifier = Modifier.fillMaxSize().padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)

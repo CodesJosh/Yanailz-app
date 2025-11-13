@@ -9,7 +9,6 @@ import java.time.LocalTime
 import java.util.UUID
 
 // --- 1. MODELOS DE DATOS ---
-// (Sin cambios aquí)
 data class Service(
     val id: String = UUID.randomUUID().toString(),
     val title: String,
@@ -26,7 +25,6 @@ data class Booking(
 )
 
 // --- 2. DATOS ---
-// (Sin cambios aquí)
 object DemoData {
     val services = listOf(
         Service(
@@ -118,7 +116,6 @@ class BookingViewModel : ViewModel() {
     var timeSelected = mutableStateOf(LocalTime.of(10, 0))
         private set
 
-    // --- ¡NUEVA FUNCIÓN! ---
     /**
      * Revisa si una hora específica en un día específico ya está reservada.
      */
