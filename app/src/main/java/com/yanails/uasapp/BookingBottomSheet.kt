@@ -95,7 +95,7 @@ private fun TimeSelector(
     Spacer(Modifier.height(8.dp))
 
     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        slots.forEach { t ->S
+        slots.forEach { t ->
             // Revisamos si esta hora (t) en este día (selectedDate) ya está tomada
             val isTaken = vm.isSlotTaken(selectedDate, t)
 
