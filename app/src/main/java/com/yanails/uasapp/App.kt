@@ -15,19 +15,14 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 
-// Objeto para definir las "rutas" (como en una web)
 object Routes {
+    const val Login = "login"
     const val Home = "home"
     const val Services = "services"
     const val Agenda = "agenda"
     const val Profile = "profile"
 
-    // Helper para los ítems de la barra
-    data class BarItem(
-        val route: String,
-        val label: String,
-        val icon: ImageVector
-    )
+    data class BarItem(val route: String, val label: String, val icon: ImageVector)
 
     val barItems = listOf(
         BarItem(Home, "Inicio", Icons.Default.Home),
@@ -40,57 +35,74 @@ object Routes {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
-    // El controlador de navegación (recuerda la pantalla actual)
     val nav = rememberNavController()
-    // El ViewModel (almacena la lista de reservas)
     val vm: BookingViewModel = viewModel()
+
+    // Controlamos en qué ruta estamos para saber si mostrar las barras
+    var currentRoute by remember { mutableStateOf(Routes.Login) }
+    val showBars = currentRoute != Routes.Login
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(currentTitle(nav)) }
-            )
+            if (showBars) {
+                TopAppBar(title = { Text(currentTitle(nav)) })
+            }
         },
         bottomBar = {
-            BottomBar(nav)
+            if (showBars) {
+                BottomBar(nav)
+            }
         },
-        // El snackbar se "engancha" al del ViewModel
         snackbarHost = { SnackbarHost(vm.snackbar) }
     ) { inner ->
-        // Este es el "Router" que cambia de pantalla
         NavHost(
             navController = nav,
-            startDestination = Routes.Home,
+            startDestination = Routes.Login,
             modifier = Modifier.padding(inner)
         ) {
-            composable(Routes.Home) {
-                HomeScreen(
-                    onCTAClick = { nav.navigate(Routes.Services) }
-                )
-            }
-            composable(Routes.Services) {
-                ServicesScreen(
-                    services = DemoData.services,
-                    onBook = { service ->
-                        // Al agendar, le decimos al ViewModel que abra la hoja
-                        vm.openBooking(service)
+            // Pantalla de Login
+            composable(Routes.Login) {
+                LaunchedEffect(Unit) { currentRoute = Routes.Login }
+
+                LoginScreen(
+                    vm = vm,
+                    onLoginSuccess = {
+                        nav.navigate(Routes.Home) {
+                            popUpTo(Routes.Login) { inclusive = true }
+                        }
                     }
                 )
             }
-            composable(Routes.Agenda) {
-                AgendaScreen(
-                    bookings = vm.bookings,
-                    onCancel = vm::cancel
+
+            // Pantalla de Inicio
+            composable(Routes.Home) {
+                LaunchedEffect(Unit) { currentRoute = Routes.Home }
+                HomeScreen(onCTAClick = { nav.navigate(Routes.Services) })
+            }
+
+            // Pantalla de Servicios
+            composable(Routes.Services) {
+                LaunchedEffect(Unit) { currentRoute = Routes.Services }
+                ServicesScreen(
+                    services = DemoData.services,
+                    onBook = { service -> vm.openBooking(service) }
                 )
             }
+
+            // Pantalla de Agenda
+            composable(Routes.Agenda) {
+                LaunchedEffect(Unit) { currentRoute = Routes.Agenda }
+                AgendaScreen(bookings = vm.bookings, onCancel = vm::cancel)
+            }
+
+            // Pantalla de Perfil
             composable(Routes.Profile) {
-                ProfileScreen()
+                LaunchedEffect(Unit) { currentRoute = Routes.Profile }
+                ProfileScreen(vm = vm)
             }
         }
     }
 
-    // Esta es la hoja (bottom sheet) que se muestra al agendar.
-    // Está "fuera" del NavHost para que se superponga a todo.
     BookingBottomSheet(vm)
 }
 
@@ -104,7 +116,6 @@ private fun BottomBar(nav: NavHostController) {
             NavigationBarItem(
                 selected = item.route == current,
                 onClick = {
-                    // Lógica para navegar sin duplicar pantallas
                     nav.navigate(item.route) {
                         popUpTo(nav.graph.findStartDestination().id) { saveState = true }
                         launchSingleTop = true
@@ -121,7 +132,6 @@ private fun BottomBar(nav: NavHostController) {
 @Composable
 private fun currentTitle(nav: NavHostController): String {
     val route = nav.currentBackStackEntryAsState().value?.destination?.route
-    // Devuelve un título diferente para cada pantalla
     return when (route) {
         Routes.Home -> "YaNails"
         Routes.Services -> "Nuestros Servicios"

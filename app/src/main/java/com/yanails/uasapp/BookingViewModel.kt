@@ -9,6 +9,7 @@ import java.time.LocalTime
 import java.util.UUID
 
 // --- 1. MODELOS DE DATOS ---
+
 data class Service(
     val id: String = UUID.randomUUID().toString(),
     val title: String,
@@ -21,84 +22,27 @@ data class Booking(
     val id: String = UUID.randomUUID().toString(),
     val service: Service,
     val date: LocalDate,
-    val time: LocalTime
+    val time: LocalTime,
+    val paidAmount: Int,
+    val isFullPayment: Boolean
 )
 
-// --- 2. DATOS ---
+// --- 2. LISTA DE SERVICIOS REALES ---
+
 object DemoData {
     val services = listOf(
-        Service(
-            title = "Manicura Completa",
-            description = "Servicio desde $5.000.",
-            priceCLP = 5000,
-            imageUrl = "https://images.unsplash.com/photo-1505682634904-d7c68f5388af?q=80&w=800"
-        ),
-        Service(
-            title = "Esmaltado Express",
-            description = "Servicio desde $8.000.",
-            priceCLP = 8000,
-            imageUrl = "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800"
-        ),
-        Service(
-            title = "Esmaltado Permanente",
-            description = "Servicio desde $10.000.",
-            priceCLP = 10000,
-            imageUrl = "https://images.unsplash.com/photo-1580136579312-94651dfd596d?q=80&w=800"
-        ),
-        Service(
-            title = "Realce Acrílico",
-            description = "Servicio desde $15.000.",
-            priceCLP = 15000,
-            imageUrl = "https://images.unsplash.com/photo-1582092728068-13a5b3956d2d?q=80&w=800"
-        ),
-        Service(
-            title = "Kapping Polygel",
-            description = "Servicio desde $15.000.",
-            priceCLP = 15000,
-            imageUrl = "https://images.unsplash.com/photo-1604902396788-a896f21f681c?q=80&w=800"
-        ),
-        Service(
-            title = "Acrílicas Esculpidas",
-            description = "Servicio desde $22.000.",
-            priceCLP = 22000,
-            imageUrl = "https://images.unsplash.com/photo-1604902396788-a896f21f681c?q=80&w=800"
-        ),
-        Service(
-            title = "Acrílicas con Tips",
-            description = "Servicio desde $20.000.",
-            priceCLP = 20000,
-            imageUrl = "https://images.unsplash.com/photo-1582092728068-13a5b3956d2d?q=80&w=800"
-        ),
-        Service(
-            title = "Soft Gel (Gel X)",
-            description = "Servicio desde $18.000.",
-            priceCLP = 18000,
-            imageUrl = "https://images.unsplash.com/photo-1505682634904-d7c68f5388af?q=80&w=800"
-        ),
-        Service(
-            title = "Pedicura Permanente",
-            description = "Servicio desde $15.000.",
-            priceCLP = 15000,
-            imageUrl = "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800"
-        ),
-        Service(
-            title = "Acripie",
-            description = "Servicio desde $20.000.",
-            priceCLP = 20000,
-            imageUrl = "https://images.unsplash.com/photo-1580136579312-94651dfd596d?q=80&w=800"
-        ),
-        Service(
-            title = "Solo Retiro",
-            description = "Servicio desde $7.000.",
-            priceCLP = 7000,
-            imageUrl = "https://images.unsplash.com/photo-1457972729786-22d4a654050b?q=80&w=800"
-        ),
-        Service(
-            title = "Retiro de Otro Lugar",
-            description = "Servicio desde $10.000.",
-            priceCLP = 10000,
-            imageUrl = "https://images.unsplash.com/photo-1457972729786-22d4a654050b?q=80&w=800"
-        )
+        Service(title = "Manicura Completa", description = "Servicio desde $5.000.", priceCLP = 5000, imageUrl = "https://images.unsplash.com/photo-1505682634904-d7c68f5388af?q=80&w=800"),
+        Service(title = "Esmaltado Express", description = "Servicio desde $8.000.", priceCLP = 8000, imageUrl = "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800"),
+        Service(title = "Esmaltado Permanente", description = "Servicio desde $10.000.", priceCLP = 10000, imageUrl = "https://images.unsplash.com/photo-1580136579312-94651dfd596d?q=80&w=800"),
+        Service(title = "Realce Acrílico", description = "Servicio desde $15.000.", priceCLP = 15000, imageUrl = "https://images.unsplash.com/photo-1582092728068-13a5b3956d2d?q=80&w=800"),
+        Service(title = "Kapping Polygel", description = "Servicio desde $15.000.", priceCLP = 15000, imageUrl = "https://images.unsplash.com/photo-1604902396788-a896f21f681c?q=80&w=800"),
+        Service(title = "Acrílicas Esculpidas", description = "Servicio desde $22.000.", priceCLP = 22000, imageUrl = "https://images.unsplash.com/photo-1604902396788-a896f21f681c?q=80&w=800"),
+        Service(title = "Acrílicas con Tips", description = "Servicio desde $20.000.", priceCLP = 20000, imageUrl = "https://images.unsplash.com/photo-1582092728068-13a5b3956d2d?q=80&w=800"),
+        Service(title = "Soft Gel (Gel X)", description = "Servicio desde $18.000.", priceCLP = 18000, imageUrl = "https://images.unsplash.com/photo-1505682634904-d7c68f5388af?q=80&w=800"),
+        Service(title = "Pedicura Permanente", description = "Servicio desde $15.000.", priceCLP = 15000, imageUrl = "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800"),
+        Service(title = "Acripie", description = "Servicio desde $20.000.", priceCLP = 20000, imageUrl = "https://images.unsplash.com/photo-1580136579312-94651dfd596d?q=80&w=800"),
+        Service(title = "Solo Retiro", description = "Servicio desde $7.000.", priceCLP = 7000, imageUrl = "https://images.unsplash.com/photo-1457972729786-22d4a654050b?q=80&w=800"),
+        Service(title = "Retiro de Otro Lugar", description = "Servicio desde $10.000.", priceCLP = 10000, imageUrl = "https://images.unsplash.com/photo-1457972729786-22d4a654050b?q=80&w=800")
     )
 }
 
@@ -115,12 +59,21 @@ class BookingViewModel : ViewModel() {
         private set
     var timeSelected = mutableStateOf(LocalTime.of(10, 0))
         private set
+    var payFullAmount = mutableStateOf(false)
+    var isProcessingPayment = mutableStateOf(false)
 
-    /**
-     * Revisa si una hora específica en un día específico ya está reservada.
-     */
+    // Datos de Usuario
+    var currentUserName = mutableStateOf("Invitado")
+        private set
+    var currentUserEmail = mutableStateOf("")
+        private set
+
+    fun login(name: String, email: String) {
+        currentUserName.value = name
+        currentUserEmail.value = email
+    }
+
     fun isSlotTaken(date: LocalDate, time: LocalTime): Boolean {
-        // Busca en la lista de reservas si alguna coincide con la fecha Y la hora
         return bookings.any { it.date == date && it.time == time }
     }
 
@@ -128,6 +81,7 @@ class BookingViewModel : ViewModel() {
         serviceSelected.value = service
         dateSelected.value = LocalDate.now()
         timeSelected.value = LocalTime.of(10, 0)
+        payFullAmount.value = false
         sheetOpen.value = true
     }
 
@@ -135,27 +89,35 @@ class BookingViewModel : ViewModel() {
         sheetOpen.value = false
     }
 
-    suspend fun confirm() {
+    suspend fun processPaymentAndConfirm() {
         val s = serviceSelected.value ?: return
         val d = dateSelected.value
         val t = timeSelected.value
 
-        // --- ¡VALIDACIÓN AÑADIDA! ---
-        // Doble chequeo al momento de confirmar, por si acaso
         if (isSlotTaken(d, t)) {
             snackbar.showSnackbar("Lo sentimos, esa hora (${t.hour}:00) ya fue tomada.")
-            return // No se crea la reserva
+            return
         }
+
+        isProcessingPayment.value = true
+        kotlinx.coroutines.delay(2000)
+        isProcessingPayment.value = false
+
+        val amountPaid = if (payFullAmount.value) s.priceCLP else (s.priceCLP * 0.25).toInt()
 
         bookings.add(
             Booking(
                 service = s,
                 date = d,
-                time = t
+                time = t,
+                paidAmount = amountPaid,
+                isFullPayment = payFullAmount.value
             )
         )
         closeBooking()
-        snackbar.showSnackbar("Reserva creada para ${s.title}")
+
+        val tipoPago = if (payFullAmount.value) "Total" else "Abono"
+        snackbar.showSnackbar("¡Pago exitoso! Reserva confirmada ($tipoPago: $$amountPaid)")
     }
 
     fun cancel(id: String) {
@@ -164,4 +126,5 @@ class BookingViewModel : ViewModel() {
 
     fun setDate(d: LocalDate) { dateSelected.value = d }
     fun setTime(t: LocalTime) { timeSelected.value = t }
+    fun setPaymentOption(full: Boolean) { payFullAmount.value = full }
 }

@@ -12,6 +12,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             UñasAppTheme {
+                // Inicia la lógica de navegación
                 App()
             }
         }

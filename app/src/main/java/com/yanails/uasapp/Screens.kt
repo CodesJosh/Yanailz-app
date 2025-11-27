@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -47,7 +48,7 @@ fun HomeScreen(
                 ),
             contentAlignment = Alignment.Center
         ) {
-            Text("Aquí foto principal")
+            Text("Aquí irá tu foto principal")
         }
         Spacer(Modifier.height(24.dp))
         Button(
@@ -60,14 +61,11 @@ fun HomeScreen(
         Spacer(Modifier.height(24.dp))
         Text("Servicios populares", style = MaterialTheme.typography.titleLarge)
         Spacer(Modifier.height(8.dp))
-        // Muestra solo los 2 primeros servicios en Home
         DemoData.services.take(2).forEach { s ->
             ServiceCard(service = s, onBook = { onCTAClick() })
         }
     }
 }
-
-// --- PANTALLA 2: SERVICIOS ---
 
 @Composable
 fun ServicesScreen(
@@ -84,8 +82,6 @@ fun ServicesScreen(
     }
 }
 
-// --- PANTALLA 3: AGENDA ---
-
 @Composable
 fun AgendaScreen(
     bookings: List<Booking>,
@@ -98,7 +94,6 @@ fun AgendaScreen(
         return
     }
 
-    // Formateadores para la fecha y hora
     val df = DateTimeFormatter.ofPattern("EEE d MMM")
     val tf = DateTimeFormatter.ofPattern("HH:mm")
 
@@ -111,15 +106,14 @@ fun AgendaScreen(
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column(Modifier.weight(1f)) {
-                        Text(b.service.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                        Text("${df.format(b.date)} • ${tf.format(b.time)}")
-                    }
+                Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+                    Text(b.service.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    Text("${df.format(b.date)} • ${tf.format(b.time)}")
+
+                    val tipo = if(b.isFullPayment) "Total Pagado" else "Abono 25% Pagado"
+                    Text("Estado: $tipo ($${b.paidAmount})", color = MaterialTheme.colorScheme.primary)
+
+                    Spacer(modifier = Modifier.height(8.dp))
                     TextButton(onClick = { onCancel(b.id) }) { Text("Cancelar") }
                 }
             }
@@ -127,16 +121,75 @@ fun AgendaScreen(
     }
 }
 
-// --- PANTALLA 4: PERFIL ---
-
 @Composable
-fun ProfileScreen() {
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("Pronto: perfil, dirección y métodos de pago")
+fun ProfileScreen(vm: BookingViewModel) {
+    val name by vm.currentUserName
+    val email by vm.currentUserEmail
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.height(40.dp))
+
+        Surface(
+            modifier = Modifier.size(120.dp),
+            shape = RoundedCornerShape(60.dp),
+            color = MaterialTheme.colorScheme.primaryContainer
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Text(
+                    text = if(name.isNotEmpty()) name.take(1).uppercase() else "Y",
+                    style = MaterialTheme.typography.displayMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(
+            text = name,
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold
+        )
+
+        Text(
+            text = email,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.secondary
+        )
+
+        Spacer(modifier = Modifier.height(40.dp))
+
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text("Mis Estadísticas", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Text("Reservas Activas:")
+                    Text("${vm.bookings.size}", fontWeight = FontWeight.Bold)
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        OutlinedButton(
+            onClick = { /* Lógica de cerrar sesión */ },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Cerrar Sesión")
+        }
     }
 }
-
-// --- COMPONENTE REUTILIZABLE: TARJETA DE SERVICIO ---
 
 @Composable
 fun ServiceCard(
@@ -149,12 +202,11 @@ fun ServiceCard(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Column {
-            // AsyncImage carga la imagen desde la URL
             AsyncImage(
                 model = service.imageUrl,
                 contentDescription = service.title,
                 modifier = Modifier.fillMaxWidth().height(160.dp),
-                contentScale = ContentScale.Crop // Recorta la imagen para llenar el espacio
+                contentScale = ContentScale.Crop
             )
             Column(Modifier.padding(16.dp)) {
                 Text(service.title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
